@@ -2,14 +2,41 @@ package model;
 
 import java.util.ArrayList;
 
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.*;
+
+@Entity
+@Table(name = "EVENTS")
+
+@NamedQueries( {
+
+@NamedQuery(name = "All", query ="SELECT * FROM EVENTS"),
+
+@NamedQuery(name = "EventByName", query = "SELECT * FROM EVENTS WHERE NAME= :name"),
+
+})
+
+
 public class Event {
 
+	@Id
+	@Column(name="NAME")
 	private String nom;
+	
+	@Column(name="CATEGORIE")
 	private String categorie;
+	
+	@Column(name="DATE")
 	private String date;
+	
+	@Column(name="ARTIST")
 	private String artiste;
+	
+	@Column(name="PLACES")
 	private ArrayList<ArrayList<Boolean>> places;
-	private static ArrayList<Event> allevents;
 	
 	public Event(String categorie, String date) {
 		super();
@@ -25,7 +52,6 @@ public class Event {
 				this.places.get(i).set(k, true);
 			}
 		}
-		Event.allevents.add(this);
 	}
 	
 	public String getNom() {
@@ -46,10 +72,6 @@ public class Event {
 	
 	public ArrayList<ArrayList<Boolean>> getPlaces(){
 		return this.places;
-	}
-	
-	public static ArrayList<Event> getAllEvents(){
-		return Event.allevents;
 	}
 	
 	public boolean[] isComplete(){

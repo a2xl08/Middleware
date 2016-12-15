@@ -42,16 +42,31 @@ package enterprise.service;
 
 import java.util.ArrayList;
 
+import javax.annotation.Resource;
+import javax.ejb.EJBContext;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
+
+import javax.persistence.Query;
+import javax.transaction.UserTransaction;
 
 import model.Event;
 
 @Stateless
 public class StatelessSessionBean implements StatelessSession {
 
+	@Resource
+	private EJBContext context;
+	@PersistenceContext(type = PersistenceContextType.TRANSACTION)
+	private EntityManager em;
+	
 	@Override
 	public void printEvents() {
-		ArrayList<Event> events = Event.getAllEvents();
+		
+		Query query = em.createNamedQuery("All");
+		ArrayList<Event> events = (ArrayList<Event>) query.getResultList();
 		for (Event event : events){
 			System.out.println("Nom : "+event.getNom());
 			System.out.println("Artiste : "+event.getArtiste());
@@ -62,11 +77,16 @@ public class StatelessSessionBean implements StatelessSession {
 				System.out.println("EVENEMEMT COMPLET !");
 			}
 		}
+		
+		
+		
 	}
 
 	@Override
 	public void printCategories(String name) {
-		for (Event event : Event.getAllEvents()){
+		Query query = em.createNamedQuery("EventByName");
+		query.setParameter("name", name);
+		Event event = (Event) query.getSingleResult();
 			if (name == event.getNom()){
 				boolean[] tab = event.isComplete();
 				if (!(tab[1])){
@@ -91,7 +111,6 @@ public class StatelessSessionBean implements StatelessSession {
 				}
 				return;
 			}
-		}
 		System.out.println("Error 404 : Not found !");
 		return;
 		
@@ -99,19 +118,22 @@ public class StatelessSessionBean implements StatelessSession {
 
 	@Override
 	public void choosePlace(String name, String place, int compte) {
-		for (Event event : Event.getAllEvents()){
+		Query query = em.createNamedQuery("EventByName");
+		query.setParameter("name", name);
+		Event event = (Event) query.getSingleResult();
 			if (name == event.getNom()){
 				event.reservation(place);
 				return;
 			}
-		}
 		System.out.println("Error 404 : Not found !");
 		return;
 	}
 
 	@Override
 	public void printPlaces(String name, String categplace) {
-		for (Event event : Event.getAllEvents()){
+		Query query = em.createNamedQuery("EventByName");
+		query.setParameter("name", name);
+		Event event = (Event) query.getSingleResult();
 			if (name == event.getNom()){
 				Integer index = 0;
 				switch(categplace){
@@ -132,7 +154,6 @@ public class StatelessSessionBean implements StatelessSession {
 				}
 				return;
 			}
-		}
 		System.out.println("Error 404 : Not found !");
 		return;
 	}
