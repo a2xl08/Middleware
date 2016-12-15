@@ -15,7 +15,7 @@ import javax.persistence.*;
 
 @NamedQuery(name = "All", query ="SELECT * FROM EVENTS"),
 
-@NamedQuery(name = "EventByName", query = "SELECT * FROM EVENTS WHERE NAME= :name"),
+@NamedQuery(name = "EventByName", query = "SELECT * FROM EVENTS WHERE NAME = :nom"),
 
 })
 

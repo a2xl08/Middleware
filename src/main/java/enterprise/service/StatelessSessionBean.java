@@ -85,7 +85,7 @@ public class StatelessSessionBean implements StatelessSession {
 	@Override
 	public void printCategories(String name) {
 		Query query = em.createNamedQuery("EventByName");
-		query.setParameter("name", name);
+		query.setParameter("nom", name);
 		Event event = (Event) query.getSingleResult();
 			if (name == event.getNom()){
 				boolean[] tab = event.isComplete();
@@ -119,7 +119,7 @@ public class StatelessSessionBean implements StatelessSession {
 	@Override
 	public void choosePlace(String name, String place, int compte) {
 		Query query = em.createNamedQuery("EventByName");
-		query.setParameter("name", name);
+		query.setParameter("nom", name);
 		Event event = (Event) query.getSingleResult();
 			if (name == event.getNom()){
 				event.reservation(place);
@@ -132,7 +132,7 @@ public class StatelessSessionBean implements StatelessSession {
 	@Override
 	public void printPlaces(String name, String categplace) {
 		Query query = em.createNamedQuery("EventByName");
-		query.setParameter("name", name);
+		query.setParameter("nom", name);
 		Event event = (Event) query.getSingleResult();
 			if (name == event.getNom()){
 				Integer index = 0;
